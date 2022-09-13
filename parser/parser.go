@@ -380,7 +380,7 @@ func fillObjectWithValidateTagValue(root *model.Object, fieldName string, proper
 			property.Maximum = parseStringIfPossible(strings.Split(strings.TrimSpace(value), "=")[1])
 		case "oneof", "oneOf":
 			values := strings.Split(strings.Split(strings.TrimSpace(value), "=")[1], " ")
-			property.Enum = make([]any, len(values))
+			property.Enum = make([]interface{}, len(values))
 			for i, s := range values {
 				property.Enum[i] = parseStringIfPossible(s)
 			}
@@ -397,7 +397,7 @@ func getJsonNameFromTags(tag string, defaultName string) string {
 
 }
 
-func parseStringIfPossible(value string) any {
+func parseStringIfPossible(value string) interface{} {
 	valueInt, err := strconv.Atoi(value)
 	if err == nil {
 		return valueInt
