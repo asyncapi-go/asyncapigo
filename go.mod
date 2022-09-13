@@ -1,6 +1,6 @@
 module github.com/asyncapi-go/asyncapigo
 
-go 1.18
+go 1.16
 
 require (
 	github.com/KyleBanks/depth v1.2.1

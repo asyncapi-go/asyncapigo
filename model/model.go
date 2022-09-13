@@ -62,17 +62,17 @@ type Tag struct {
 type Object struct {
 	Ref string `yaml:"$ref,omitempty"`
 
-	OneOf []Object `yaml:"oneOf,omitempty"`
-	Enum  []any    `yaml:"enum,omitempty"`
+	OneOf []Object      `yaml:"oneOf,omitempty"`
+	Enum  []interface{} `yaml:"enum,omitempty"`
 
-	Description string   `yaml:"description,omitempty"`
-	Example     any      `yaml:"example,omitempty"`
-	Format      string   `yaml:"format,omitempty"`
-	Type        string   `yaml:"type,omitempty"`
-	Items       []Object `yaml:"items,omitempty"`
-	Required    []string `yaml:"required,omitempty"`
-	Maximum     any      `yaml:"maximum,omitempty"`
-	Minimum     any      `yaml:"minimum,omitempty"`
+	Description string      `yaml:"description,omitempty"`
+	Example     interface{} `yaml:"example,omitempty"`
+	Format      string      `yaml:"format,omitempty"`
+	Type        string      `yaml:"type,omitempty"`
+	Items       []Object    `yaml:"items,omitempty"`
+	Required    []string    `yaml:"required,omitempty"`
+	Maximum     interface{} `yaml:"maximum,omitempty"`
+	Minimum     interface{} `yaml:"minimum,omitempty"`
 
 	Properties map[string]Object `yaml:"properties,omitempty"`
 }
