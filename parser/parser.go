@@ -26,7 +26,7 @@ var handlerMatchParamNameExp = regexp.MustCompile(`(?mU)@([a-z].*) `)
 var handlerMatchSimpleValueExp = regexp.MustCompile(`(?m)@[a-z].* (.*)`)
 
 // parse comments like " // @param value:field1=2;field2='some value';"
-var handlerMatchValueWithParamsExp = regexp.MustCompile(`@[a-z].* ([a-zA-Z]*): *(.*)`)
+var handlerMatchValueWithParamsExp = regexp.MustCompile(`@[a-z].* ([a-zA-Z_-]*): *(.*)`)
 
 var modelMatchJsonFieldNameExp = regexp.MustCompile(`(?U)json:"(.*)["|,]`)
 
@@ -139,7 +139,7 @@ func (p *Parser) parseFunc(decl *ast.FuncDecl) error {
 		return nil
 	}
 
-	if !(len(decl.Doc.List) > 0 && strings.Contains(decl.Doc.List[0].Text, "asyncApi")) {
+	if !(len(decl.Doc.List) > 0 && strings.Contains(strings.ToLower(decl.Doc.List[0].Text), "asyncapi")) {
 		return nil
 	}
 
@@ -168,7 +168,7 @@ func (p *Parser) parseFunc(decl *ast.FuncDecl) error {
 				message.Headers.Required = append(message.Headers.Required, headerName)
 			}
 			message.Headers.Properties[headerName] = model.Object{
-				Type:        headerParams["type"],
+				Type:        mapType(headerParams["type"]),
 				Description: headerParams["description"],
 				Example:     parseStringIfPossible(headerParams["example"]),
 				Format:      headerParams["format"],
@@ -249,6 +249,9 @@ func (p *Parser) parseModel(decl *ast.TypeSpec) model.Object {
 			property := model.Object{}
 			p.fillPropertyType(&property, field.Type)
 			name := getJsonNameFromTags(field.Tag.Value, field.Names[0].Name)
+			if field.Doc != nil {
+				property.Description = field.Doc.Text()
+			}
 			p.fillPropertyTagValues(&object, name, &property, field.Tag.Value)
 			object.Properties[name] = property
 		}
@@ -265,6 +268,11 @@ func fillFieldString(objectValue reflect.Value, fieldPath string, fieldValue str
 	field := objectValue.Elem().FieldByName(cases.Title(language.Und).String(fieldName))
 
 	if field.IsValid() {
+
+		// skip not empty fields
+		if !field.IsZero() {
+			return
+		}
 		switch field.Kind() {
 		case reflect.Struct:
 			if strings.Contains(fieldPath, ".") {

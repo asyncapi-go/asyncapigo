@@ -1,0 +1,59 @@
+asyncapi: 2.4.0
+info:
+    title: System controller
+    version: Mark 1
+    description: System management service
+channels:
+    emergency:
+        publish:
+            message:
+                oneOf:
+                    - $ref: '#/components/messages/emergency.publish.EmergencyButton'
+                    - $ref: '#/components/messages/emergency.publish.CancelButton'
+    subsystems.commands:
+        subscribe:
+            message:
+                oneOf:
+                    - $ref: '#/components/messages/subsystems.commands.subscribe.DeleteAllData'
+components:
+    messages:
+        emergency.publish.CancelButton:
+            tags:
+                - name: emergency
+            summary: cancel data destruction
+            description: Cancelling the deletion of the system, can only be invoked until the deletion call timeout has expired
+        emergency.publish.EmergencyButton:
+            tags:
+                - name: emergency
+            payload:
+                $ref: '#/components/schemas/amqp.EmergencyCommand'
+            summary: complete data destruction
+            description: Deleting all existing data and resetting the system
+        subsystems.commands.subscribe.DeleteAllData:
+            headers:
+                type: object
+                properties:
+                    overwrite_count:
+                        description: how many times the data needs to be overwritten
+                        example: 5
+                        type: integer
+            tags:
+                - name: commands
+            summary: Command to queue subscribers to delete all data
+    schemas:
+        amqp.EmergencyCommand:
+            type: object
+            required:
+                - confirmation_code
+                - timeout
+            properties:
+                confirmation_code:
+                    description: |
+                        Confirmation code, written on a piece of paper under the main boss's keyboard
+                    example: endgame
+                    type: string
+                timeout:
+                    description: Time in seconds until execution
+                    example: 3
+                    type: integer
+                    minimum: 3

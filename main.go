@@ -21,7 +21,9 @@ func main() {
 	api.Components.Schemas = make(map[string]model.Object)
 
 	var path string
+	var out string
 	flag.StringVar(&path, "d", "", "dir")
+	flag.StringVar(&out, "out", "docs/asyncapi.yaml", "dir")
 	flag.Parse()
 
 	workDir, err := os.Getwd()
@@ -43,7 +45,7 @@ func main() {
 	}
 
 	fmt.Println("Saving...")
-	outFile, err := os.Create("asyncapi.yaml")
+	outFile, err := os.Create(out)
 	if err != nil {
 		log.Fatalf("create file: %v", err)
 	}
