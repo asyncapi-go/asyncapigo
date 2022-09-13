@@ -1,5 +1,11 @@
 # AsyncAPI spec generator from Golang code
 
+## Installation
+
+```shell
+go install github.com/asyncapi-go/asyncapigo@latest
+```
+
 ## Example 
 
 Following Go code [(full example)](./example/basic/main.go)
