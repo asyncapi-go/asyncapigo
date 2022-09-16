@@ -1,4 +1,5 @@
 # AsyncAPI spec generator from Golang code
+[![Go Reference](https://pkg.go.dev/badge/github.com/asyncapi-go/asyncapigo.svg)](https://pkg.go.dev/github.com/asyncapi-go/asyncapigo)
 
 ## Installation
 
