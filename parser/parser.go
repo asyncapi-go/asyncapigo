@@ -99,10 +99,7 @@ func (p *Parser) Parse(path string, parseDependencies int) error {
 				iFilter, func(node ast.Node, push bool) (proceed bool) {
 					switch decl := node.(type) {
 					case *ast.FuncDecl:
-						err := p.parseFunc(decl)
-						if err != nil {
-							fmt.Println("\tparse function warning:", err)
-						}
+						p.parseFunc(decl)
 					case *ast.GenDecl:
 						if decl, ok := decl.Specs[0].(*ast.TypeSpec); ok {
 							p.models[fmt.Sprintf("%s.%s", astPackage.Name, decl.Name)] = decl
@@ -134,13 +131,13 @@ func (p *Parser) Parse(path string, parseDependencies int) error {
 	return nil
 }
 
-func (p *Parser) parseFunc(decl *ast.FuncDecl) error {
+func (p *Parser) parseFunc(decl *ast.FuncDecl) {
 	if decl.Doc == nil {
-		return nil
+		return
 	}
 
 	if !(len(decl.Doc.List) > 0 && strings.Contains(strings.ToLower(decl.Doc.List[0].Text), "asyncapi")) {
-		return nil
+		return
 	}
 
 	fmt.Println("parse function", decl.Name.String())
@@ -234,7 +231,7 @@ func (p *Parser) parseFunc(decl *ast.FuncDecl) error {
 	}
 
 	p.api.Components.Messages[messageName] = message
-	return nil
+	return
 }
 
 func (p *Parser) parseModel(decl *ast.TypeSpec) model.Object {
