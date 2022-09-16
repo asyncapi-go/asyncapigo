@@ -3,7 +3,6 @@ linters:
     - bodyclose
     - depguard
     - dogsled
-    - gocyclo
     - goimports
     - gosec
     - gosimple
@@ -37,8 +36,6 @@ linters-settings:
       # The io/ioutil package has been deprecated.
       # https://go.dev/doc/go1.16#ioutil
       - io/ioutil
-  gocyclo:
-    min-complexity: 16
   govet:
     check-shadowing: false
   lll:
