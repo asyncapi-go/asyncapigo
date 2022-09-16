@@ -12,7 +12,6 @@ linters:
     - megacheck
     - misspell
     - nakedret
-    - revive
     - staticcheck
     - typecheck
     - unconvert
