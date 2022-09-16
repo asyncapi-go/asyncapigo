@@ -23,7 +23,6 @@ type EmergencyCommand struct {
 func EmergencyButton(payload EmergencyCommand) {
 	if payload.ConfirmationCode != "1234" {
 		panic("incorrect confirmation code")
-		return
 	}
 	time.Sleep(time.Duration(payload.Timeout) * time.Second)
 
