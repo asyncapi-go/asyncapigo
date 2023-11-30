@@ -9,6 +9,8 @@ func mapType(source string) (name string) {
 		return "number"
 	case "string":
 		return "string"
+	case "bool":
+		return "boolean"
 	default:
 		return ""
 	}
